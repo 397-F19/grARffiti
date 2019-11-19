@@ -81,10 +81,7 @@ export default class HelloWorldSceneAR extends Component {
       <ViroARScene onTrackingUpdated={this._onTrackingUpdated}>
 
         {/* Text to show whether or not the AR system has initialized yet, see ViroARScene's onTrackingInitialized*/}
-        <ViroText text={this.state.text} scale={[.5, .5, .5]} position={[0, 0, -1]} style={styles.helloWorldTextStyle} />
-        <ViroText text={this.state.lat} scale={[.5, .5, .5]} position={[0, 1, -1]} style={styles.helloWorldTextStyle} />
-        <ViroText text={this.state.lng} scale={[.5, .5, .5]} position={[0, -1, -1]} style={styles.helloWorldTextStyle} />
-
+        {this.props.arSceneNavigator.viroAppProps.objects}
         <ViroAmbientLight color={"#aaaaaa"} influenceBitMask={1} />
 
         <ViroSpotLight

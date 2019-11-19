@@ -23,10 +23,16 @@ import {
   ViroText,
 } from 'react-viro';
 
+// import scene from './js/HelloWorldSceneAR'
 /*
  TODO: Insert your API key below
  */
 var sharedProps = {
+  objects:[<ViroText text={"test"} scale={[.5, .5, .5]} position={[0, 1, 1]} style={{    fontFamily: 'Arial',
+  fontSize: 60,
+  color: '#ffffff',
+  textAlignVertical: 'center',
+  textAlign: 'center',  }} />],
   apiKey:"API_KEY_HERE",
 }
 
@@ -49,7 +55,11 @@ export default class ViroSample extends Component {
     this.state = {
       navigatorType : defaultNavigatorType,
       sharedProps : sharedProps,
-      objects: [],
+      objects:[<ViroText text={"test"} scale={[.5, .5, .5]} position={[0, 1, 1]} style={{    fontFamily: 'Arial',
+        fontSize: 60,
+        color: '#ffffff',
+        textAlignVertical: 'center',
+        textAlign: 'center',  }} />],
     }
     this._getExperienceSelector = this._getExperienceSelector.bind(this);
     this._getARNavigator = this._getARNavigator.bind(this);
@@ -115,12 +125,12 @@ export default class ViroSample extends Component {
       <View style={{flex:1, position: 'absolute'}}>
         <ViroARSceneNavigator {...this.state.sharedProps}
           initialScene={{scene: InitialARScene}}
-          style={{flex : 1}}>
-          {this.state.objects}
+          style={{flex : 1}}
+          viroAppProps={{objects: this.state.objects}}>
         </ViroARSceneNavigator>
         <View style={{position: 'absolute', backgroundColor: '#00000066', left: 0, right: 0, bottom: 200, height:34,  alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center'}}>
           <TouchableHighlight onPress={() => this.addObjects()}>
-          <Text style={localStyles.buttonText}>HEY IM RIGHT FUCKING HERE</Text>
+          <Text style={localStyles.buttonText}>ADD OBJECT</Text>
           </TouchableHighlight>
         </View>
       </View>
