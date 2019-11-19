@@ -14,7 +14,7 @@
  * You can use this module directly, or just require InitializeCore.
  */
 if (global.__RCTProfileIsProfiling) {
-  const Systrace = require('../Performance/Systrace');
+  const Systrace = require('Systrace');
   Systrace.installReactHook();
   Systrace.setEnabled(true);
 }

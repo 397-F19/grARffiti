@@ -11,6 +11,6 @@
 
 'use strict';
 
-import type {TVViewProps} from '../AppleTV/TVViewPropTypes';
+import type {TVViewProps} from 'TVViewPropTypes';
 
 export type PlatformViewPropTypes = TVViewProps;

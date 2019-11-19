@@ -10,7 +10,7 @@
 
 'use strict';
 
-const Platform = require('../../Utilities/Platform');
+const Platform = require('Platform');
 
 function processDecelerationRate(
   decelerationRate: number | 'normal' | 'fast',

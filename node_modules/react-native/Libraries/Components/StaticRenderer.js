@@ -10,7 +10,7 @@
 
 'use strict';
 
-const React = require('react');
+const React = require('React');
 
 type Props = $ReadOnly<{|
   /**

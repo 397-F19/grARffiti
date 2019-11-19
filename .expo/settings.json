@@ -1,8 +1,0 @@
-{
-  "hostType": "lan",
-  "lanType": "ip",
-  "dev": true,
-  "minify": false,
-  "urlRandomness": "a2-3n3",
-  "https": false
-}

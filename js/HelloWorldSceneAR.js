@@ -2,206 +2,232 @@
 
 import React, { Component } from 'react';
 
-import {StyleSheet} from 'react-native';
+import {StyleSheet, TouchableHighlight, View, Image} from 'react-native';
 
 import {
   ViroARScene,
-  ViroDirectionalLight,
-  ViroBox,
-  ViroConstants,
-  ViroARTrackingTargets,
-  ViroMaterials,
   ViroText,
-  ViroImage,
-  ViroFlexView,
-  ViroARImageMarker,
-  ViroARObjectMarker,
-  ViroAmbientLight,
-  ViroARPlane,
-  ViroAnimatedImage,
-  ViroAnimations,
-  ViroNode,
+  ViroMaterials,
+  ViroBox,
   Viro3DObject,
-  ViroQuad
+  ViroAmbientLight,
+  ViroSpotLight,
+  ViroARPlane,
+  ViroARPlaneSelector,
+  ViroQuad,
+  ViroNode,
+  ViroAnimations,
+  ViroConstants,
 } from 'react-viro';
 
-export class BusinessCard extends Component {
 
-  state = {
-    isTracking: false,
-    initialized: false,
-    runAnimation: false
+
+export default class HelloWorldSceneAR extends Component {
+   constructor() {
+    super();
+
+    this.state = {
+      hasARInitialized : false,
+      text : "Initializing AR...",
+      lat: null,
+      lng: null,
+    }
+    this._onTrackingUpdated = this._onTrackingUpdated.bind(this);
+    this.inPolygon = this.inPolygon.bind(this);
   }
 
-  getNoTrackingUI(){
-    const { isTracking, initialized } = this.state;
-    return (
-      <ViroText text={
-        initialized ? 'Initializing AR...'
-          : "No Tracking"
-      }/>
-    )
+  componentDidMount() {
+   
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        let point = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        this.setState({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        })
+
+        let polygonArray = [
+          {
+            x: point.lat - 0.2,
+            y: point.lng - 0.2
+          },
+          {
+            x: point.lat+0.2,
+            y: point.lng+0.2
+          }
+        ] // example of polygonArray 
+   
+        if (this.inPolygon(point, polygonArray)) {
+          this.setState({
+            text: "Hello mudd"
+          })
+        } else {
+          this.setState({
+            text: "bye cruel world"
+          })
+        }
+      },
+      (error) => alert(error.message),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
   }
 
-
-
-  getARScene() {
+  render () {
     return (
-      <ViroNode>
-        <ViroARImageMarker target={"businessCard"}
-          onAnchorFound={
-            () => this.setState({
-                runAnimation: true
-            })}
-        >
-          <ViroNode key="card">
-            <ViroNode
-              opacity={0} position={[0, -0.02, 0]}
-              animation={{
-                name:'animateImage',
-                run: this.state.runAnimation
-                }}
-            >
-              <ViroFlexView
-                  rotation={[-90, 0, 0]}
-                  height={0.03}
-                  width={0.05}
-                  style={styles.card}
-              >
-                <ViroFlexView
-                  style={styles.cardWrapper}
-                >
-                  <ViroImage
-                    height={0.015}
-                    width={0.015}
-                    style={styles.image}
-                    source={require('./res/avatar.png')}
-                  />
-                  <ViroText
-                    textClipMode="None"
-                    text="Vladimir Novick"
-                    scale={[.015, .015, .015]}
-                    style={styles.textStyle}
-                  />
-                </ViroFlexView>
-                <ViroFlexView
-                  onTouch={() => alert("twitter")}
-                  style={styles.subText}
-                >
-                  <ViroText
-                    width={0.01}
-                    height={0.01}
-                    textAlign="left"
-                    textClipMode="None"
-                    text="@VladimirNovick"
-                    scale={[.01, .01, .01]}
-                    style={styles.textStyle}
-                  />
-                  <ViroAnimatedImage
-                    height={0.01}
-                    width={0.01}
-                    loop={true}
-                    source={require('./res/tweet.gif')}
-                  />
-                </ViroFlexView>
-              </ViroFlexView>
-            </ViroNode>
-            <ViroNode opacity={0} position={[0, 0, 0]}
-              animation={{
-                name:'animateViro',
-                run: this.state.runAnimation
-              }}
-            >
-              <ViroText text="www.viromedia.com"
-                rotation={[-90, 0, 0]}
-                scale={[.01, .01, .01]}
-                style={styles.textStyle}
-              />
-            </ViroNode>
-          </ViroNode>
-        </ViroARImageMarker>
-      </ViroNode>
-    )
-  }
+      <ViroARScene onTrackingUpdated={this._onTrackingUpdated}>
 
-  render() {
-    return (
-      <ViroARScene onTrackingUpdated={this._onInitialized} >
-        { this.state.isTracking ? this.getNoTrackingUI() : this.getARScene() }
+        {/* Text to show whether or not the AR system has initialized yet, see ViroARScene's onTrackingInitialized*/}
+        <ViroText text={this.state.text} scale={[.5, .5, .5]} position={[0, 0, -1]} style={styles.helloWorldTextStyle} />
+        <ViroText text={this.state.lat} scale={[.5, .5, .5]} position={[0, 1, -1]} style={styles.helloWorldTextStyle} />
+        <ViroText text={this.state.lng} scale={[.5, .5, .5]} position={[0, -1, -1]} style={styles.helloWorldTextStyle} />
+
+        <ViroAmbientLight color={"#aaaaaa"} influenceBitMask={1} />
+
+        <ViroSpotLight
+            innerAngle={5}
+            outerAngle={90}
+            direction={[0,-1,-.2]}
+            position={[0, 3, 1]}
+            color="#aaaaaa"
+            castsShadow={true}
+            />
+
+        {/* Node that contains a light, an object and a surface to catch its shadow
+            notice that the dragType is "FixedToWorld" so the object can be dragged
+            along real world surfaces and points. */}
+        <ViroNode position={[-.5, -.5, -.5]} dragType="FixedToWorld" onDrag={()=>{}} >
+
+          {/* Spotlight to cast light on the object and a shadow on the surface, see
+              the Viro documentation for more info on lights & shadows */}
+          <ViroSpotLight
+            innerAngle={5}
+            outerAngle={45}
+            direction={[0,-1,-.2]}
+            position={[0, 3, 0]}
+            color="#ffffff"
+            castsShadow={true}
+            influenceBitMask={2}
+            shadowMapSize={2048}
+            shadowNearZ={2}
+            shadowFarZ={5}
+            shadowOpacity={.7} />
+
+          <Viro3DObject
+              source={require('./res/emoji_smile/emoji_smile.vrx')}
+              position={[0, .2, 0]}
+              scale={[.2, .2, .2]}
+              type="VRX"
+            lightReceivingBitMask={3}
+            shadowCastingBitMask={2}
+            transformBehaviors={['billboardY']}
+            resources={[require('./res/emoji_smile/emoji_smile_diffuse.png'),
+                       require('./res/emoji_smile/emoji_smile_specular.png'),
+                       require('./res/emoji_smile/emoji_smile_normal.png')]}/>
+
+          <ViroQuad
+            rotation={[-90,0,0]}
+            width={.5} height={.5}
+            arShadowReceiver={true}
+            lightReceivingBitMask={2} />
+
+        </ViroNode>
+
+        {/* Node that contains a light, an object and a surface to catch its shadow
+          notice that the dragType is "FixedToWorld" so the object can be dragged
+          along real world surfaces and points. */}
+        <ViroNode position={[.5,-.5,-.5]} dragType="FixedToWorld" onDrag={()=>{}} >
+
+          {/* Spotlight to cast light on the object and a shadow on the surface, see
+              the Viro documentation for more info on lights & shadows */}
+          <ViroSpotLight
+            innerAngle={5}
+            outerAngle={45}
+            direction={[0,-1,-.2]}
+            position={[0, 3, 0]}
+            color="#ffffff"
+            castsShadow={true}
+            influenceBitMask={4}
+            shadowMapSize={2048}
+            shadowNearZ={2}
+            shadowFarZ={5}
+            shadowOpacity={.7} />
+
+          <Viro3DObject
+            source={require('./res/object_soccerball/object_soccer_ball.vrx')}
+            position={[0, .15, 0]}
+            scale={[.3, .3, .3]}
+            type="VRX"
+            lightReceivingBitMask={5}
+            shadowCastingBitMask={4}
+            transformBehaviors={['billboardY']}
+            resources={[require('./res/object_soccerball/object_soccer_ball_diffuse.png'),
+                       require('./res/object_soccerball/object_soccer_ball_normal.png'),
+                       require('./res/object_soccerball/object_soccer_ball_specular.png')]}/>
+          <ViroQuad
+            rotation={[-90,0,0]}
+            width={.5} height={.5}
+            arShadowReceiver={true}
+            lightReceivingBitMask={4} />
+
+        </ViroNode>
+
       </ViroARScene>
     );
   }
 
-  _onInitialized = (state, reason) => {
-    if (state == ViroConstants.TRACKING_NORMAL) {
-      isTracking: true
-    } else if (state == ViroConstants.TRACKING_NONE) {
-      isTracking: false
+  inPolygon(point, poly) {
+    var x = point.lat, y = point.lng;
+
+    for (var i = 0; i < (poly.length - 1); i++) {
+        var vertex1 = poly[i], vertex2 = poly[i+1];
+
+        var maxX = Math.max(vertex1.x, vertex2.x), minX = Math.min(vertex1.x, vertex2.x),
+            maxY = Math.max(vertex1.y, vertex2.y), minY = Math.min(vertex1.y, vertex2.y);
+
+        if(x < minX || x > maxX || y < minY || y > maxY) {
+            console.log("NO");
+            return false;
+        }
     }
-  }
+
+    console.log("YES");
+    return true;
 }
 
+
+  _onTrackingUpdated(state, reason) {
+    // if the state changes to "TRACKING_NORMAL" for the first time, then
+    // that means the AR session has initialized!
+    if (state == ViroConstants.TRACKING_NORMAL) {
+      this.setState({
+        hasARInitialized : true,
+      });
+    }
+  }
+};
+
 var styles = StyleSheet.create({
-  textStyle: {
-    flex: .5,
-    fontFamily: 'Roboto',
+  helloWorldTextStyle: {
+    fontFamily: 'Arial',
     fontSize: 30,
     color: '#ffffff',
-    textAlignVertical: 'top',
-    textAlign: 'left',
-    fontWeight: 'bold',
+    textAlignVertical: 'center',
+    textAlign: 'center',
   },
-  card: {
-    flexDirection: 'column'
-  },
-  cardWrapper: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    padding: 0.001,
-    flex: .5
-  },
-  subText: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    flex: .5
-  }
 });
 
-ViroARTrackingTargets.createTargets({
-  "businessCard" : {
-    source : require('./res/business_card.png'),
-    orientation : "Up",
-    physicalWidth : 0.05 // real world width in meters
-  }
-});
-
-ViroMaterials.createMaterials({
-  imagePlaceholder: {
-    diffuseColor: "rgba(255,255,255,1)"
-  },
-  quad: {
-    diffuseColor: "rgba(0,0,0,0.5)"
-  }
-});
 
 ViroAnimations.registerAnimations({
-  animateImage:{
-    properties:{
-      positionX: 0.05,
-      opacity: 1.0
-    },
-      easing:"Bounce",
-      duration: 500
-  },
-  animateViro: {
+  rotate: {
     properties: {
-      positionZ: 0.02,
-      opacity: 1.0,
+      rotateY: "+=90"
     },
-    easing:"Bounce",
-    duration: 500
-  }
+    duration: 250, //.25 seconds
+  },
 });
 
-module.exports = BusinessCard;
+module.exports = HelloWorldSceneAR;

@@ -19,10 +19,10 @@ import {
 
 import {
   ViroVRSceneNavigator,
-  ViroARSceneNavigator
+  ViroARSceneNavigator,
+  ViroText,
 } from 'react-viro';
 
-import Sketch from './js/sketch';
 /*
  TODO: Insert your API key below
  */
@@ -32,7 +32,7 @@ var sharedProps = {
 
 // Sets the default scene you want for AR and VR
 var InitialARScene = require('./js/HelloWorldSceneAR');
-var InitialVRScene = require('./js/sketch');
+var InitialVRScene = require('./js/HelloWorldSceneAR');
 
 var UNSET = "UNSET";
 var VR_NAVIGATOR_TYPE = "VR";
@@ -48,30 +48,29 @@ export default class ViroSample extends Component {
 
     this.state = {
       navigatorType : defaultNavigatorType,
-      sharedProps : sharedProps
+      sharedProps : sharedProps,
+      objects: [],
     }
     this._getExperienceSelector = this._getExperienceSelector.bind(this);
     this._getARNavigator = this._getARNavigator.bind(this);
     this._getVRNavigator = this._getVRNavigator.bind(this);
     this._getExperienceButtonOnPress = this._getExperienceButtonOnPress.bind(this);
     this._exitViro = this._exitViro.bind(this);
+
   }
 
   // Replace this function with the contents of _getVRNavigator() or _getARNavigator()
   // if you are building a specific type of experience.
   render() {
 
-    // if (this.state.navigatorType == UNSET) {
-    //   return this._getExperienceSelector();
-    // } else if (this.state.navigatorType == VR_NAVIGATOR_TYPE) {
-    //   return this._getVRNavigator();
-    // } else if (this.state.navigatorType == AR_NAVIGATOR_TYPE) {
-    //   return this._getARNavigator();
-    // }
-    return (
+    if (this.state.navigatorType == UNSET) {
+      return this._getExperienceSelector();
+    } else if (this.state.navigatorType == VR_NAVIGATOR_TYPE) {
+      return this._getVRNavigator();
+    } else if (this.state.navigatorType == AR_NAVIGATOR_TYPE) {
+      return this._getARNavigator();
+    }
 
-        <Sketch/>
-      )
   }
 
   // Presents the user with a choice of an AR or VR experience
@@ -102,11 +101,29 @@ export default class ViroSample extends Component {
     );
   }
 
+  addObjects() {
+    let newObjects = this.state.objects
+    newObjects.push(<ViroText text={"STAMP"} scale={[.5, .5, .5]} position={[0, 0, -1]} style={localStyles.helloWorldTextStyle} />)
+    this.setState({
+      objects: newObjects
+    })
+  }
+
   // Returns the ViroARSceneNavigator which will start the AR experience
   _getARNavigator() {
     return (
-      <ViroARSceneNavigator {...this.state.sharedProps}
-        initialScene={{scene: InitialARScene}} />
+      <View style={{flex:1, position: 'absolute'}}>
+        <ViroARSceneNavigator {...this.state.sharedProps}
+          initialScene={{scene: InitialARScene}}
+          style={{flex : 1}}>
+          {this.state.objects}
+        </ViroARSceneNavigator>
+        <View style={{position: 'absolute', backgroundColor: '#00000066', left: 0, right: 0, bottom: 200, height:34,  alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableHighlight onPress={() => this.addObjects()}>
+          <Text style={localStyles.buttonText}>HEY IM RIGHT FUCKING HERE</Text>
+          </TouchableHighlight>
+        </View>
+      </View>
     );
   }
   
@@ -161,7 +178,7 @@ var localStyles = StyleSheet.create({
     fontSize : 25
   },
   buttonText: {
-    color:'#fff',
+    color:'black',
     textAlign:'center',
     fontSize : 20
   },
@@ -177,6 +194,11 @@ var localStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
   },
+  screenIcon: {
+    position : 'absolute',
+    height: 58,
+    width: 58,
+  },
   exitButton : {
     height: 50,
     width: 100,
@@ -188,7 +210,14 @@ var localStyles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#fff',
-  }
+  },
+    helloWorldTextStyle: {
+    fontFamily: 'Arial',
+    fontSize: 60,
+    color: '#ffffff',
+    textAlignVertical: 'center',
+    textAlign: 'center',  
+  },
 });
 
 module.exports = ViroSample
