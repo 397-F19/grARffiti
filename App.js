@@ -19,6 +19,7 @@ import {
 
 import {
   ViroVRSceneNavigator,
+  ViroARCamera,
   ViroARSceneNavigator,
   ViroText,
 } from 'react-viro';
@@ -53,7 +54,8 @@ export default class ViroSample extends Component {
     super();
 
     this.state = {
-      navigatorType : defaultNavigatorType,
+      test : 0,
+      navigatorType : AR_NAVIGATOR_TYPE,
       sharedProps : sharedProps,
       objects:[<ViroText text={"test"} scale={[.5, .5, .5]} position={[0, 1, 1]} style={{    fontFamily: 'Arial',
         fontSize: 60,
@@ -112,10 +114,14 @@ export default class ViroSample extends Component {
   }
 
   addObjects() {
-    let newObjects = this.state.objects
-    newObjects.push(<ViroText text={"STAMP"} scale={[.5, .5, .5]} position={[0, 0, -1]} style={localStyles.helloWorldTextStyle} />)
+    let newObjects = this.state.objects;
+    let testO = this.state.test + 1;
+    newObjects.push(<ViroARCamera> 
+                      <ViroText className="new" text={"" + testO} scale={[.5, .5, .5]} position={[0, 0, -1]} style={localStyles.helloWorldTextStyle} />
+                    </ViroARCamera>)
     this.setState({
-      objects: newObjects
+      objects: newObjects,
+      test: testO,
     })
   }
 
@@ -130,7 +136,7 @@ export default class ViroSample extends Component {
         </ViroARSceneNavigator>
         <View style={{position: 'absolute', backgroundColor: '#00000066', left: 0, right: 0, bottom: 200, height:34,  alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center'}}>
           <TouchableHighlight onPress={() => this.addObjects()}>
-          <Text style={localStyles.buttonText}>ADD OBJECT</Text>
+            <Text style={localStyles.buttonText}>Add Objects</Text>
           </TouchableHighlight>
         </View>
       </View>

@@ -77,11 +77,19 @@ export default class HelloWorldSceneAR extends Component {
   }
 
   render () {
+    var objects = this.props.arSceneNavigator.viroAppProps.objects;
+    for(let i = 0; i < objects.length; i++) {
+      if(objects[i].className === "new") {
+        objects[i].position = this.props.initialScene.getCameraOrientation().position;
+        objects[i].className = "";
+      }
+    }
+
     return (
-      <ViroARScene onTrackingUpdated={this._onTrackingUpdated}>
+      <ViroARScene ref="arscene" onTrackingUpdated={this._onTrackingUpdated}>
 
         {/* Text to show whether or not the AR system has initialized yet, see ViroARScene's onTrackingInitialized*/}
-        {this.props.arSceneNavigator.viroAppProps.objects}
+        {objects}
         <ViroAmbientLight color={"#aaaaaa"} influenceBitMask={1} />
 
         <ViroSpotLight
@@ -96,7 +104,7 @@ export default class HelloWorldSceneAR extends Component {
         {/* Node that contains a light, an object and a surface to catch its shadow
             notice that the dragType is "FixedToWorld" so the object can be dragged
             along real world surfaces and points. */}
-        <ViroNode position={[-.5, -.5, -.5]} dragType="FixedToWorld" onDrag={()=>{}} >
+        <ViroNode position={[0,0,-1]} dragType="FixedToWorld" onDrag={()=>{}} >
 
           {/* Spotlight to cast light on the object and a shadow on the surface, see
               the Viro documentation for more info on lights & shadows */}
@@ -115,7 +123,7 @@ export default class HelloWorldSceneAR extends Component {
 
           <Viro3DObject
               source={require('./res/emoji_smile/emoji_smile.vrx')}
-              position={[0, .2, 0]}
+              position={[0, 0, 0]}
               scale={[.2, .2, .2]}
               type="VRX"
             lightReceivingBitMask={3}
