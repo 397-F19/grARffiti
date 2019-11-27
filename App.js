@@ -55,7 +55,7 @@ export default class ViroSample extends Component {
 
     this.state = {
       test : 0,
-      navigatorType : AR_NAVIGATOR_TYPE,
+      navigatorType : defaultNavigatorType,
       sharedProps : sharedProps,
       objects:[<ViroText text={"test"} scale={[.5, .5, .5]} position={[0, 1, 1]} style={{    fontFamily: 'Arial',
         fontSize: 60,
@@ -92,21 +92,14 @@ export default class ViroSample extends Component {
         <View style={localStyles.inner} >
 
           <Text style={localStyles.titleText}>
-            Choose your desired experience:
+            grARffiti
           </Text>
 
           <TouchableHighlight style={localStyles.buttons}
             onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE)}
             underlayColor={'#68a0ff'} >
 
-            <Text style={localStyles.buttonText}>AR</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight style={localStyles.buttons}
-            onPress={this._getExperienceButtonOnPress(VR_NAVIGATOR_TYPE)}
-            underlayColor={'#68a0ff'} >
-
-            <Text style={localStyles.buttonText}>VR</Text>
+            <Text style={localStyles.buttonText}>Get Started</Text>
           </TouchableHighlight>
         </View>
       </View>
@@ -134,9 +127,9 @@ export default class ViroSample extends Component {
           style={{flex : 1}}
           viroAppProps={{objects: this.state.objects}}>
         </ViroARSceneNavigator>
-        <View style={{position: 'absolute', backgroundColor: '#00000066', left: 0, right: 0, bottom: 200, height:34,  alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{position: 'absolute', left: "50%", bottom: "30%", height:34,  alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center', width: 64, height: 64, borderRadius: 64, backgroundColor: "red", }}>
           <TouchableHighlight onPress={() => this.addObjects()}>
-            <Text style={localStyles.buttonText}>Add Objects</Text>
+            <Text style={localStyles.buttonText}>Add</Text>
           </TouchableHighlight>
         </View>
       </View>
