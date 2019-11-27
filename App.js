@@ -15,6 +15,7 @@ import {
   StyleSheet,
   PixelRatio,
   TouchableHighlight,
+  TextInput
 } from 'react-native';
 
 import {
@@ -54,14 +55,11 @@ export default class ViroSample extends Component {
     super();
 
     this.state = {
-      test : 0,
       navigatorType : defaultNavigatorType,
       sharedProps : sharedProps,
-      objects:[<ViroText text={"test"} scale={[.5, .5, .5]} position={[0, 1, 1]} style={{    fontFamily: 'Arial',
-        fontSize: 60,
-        color: '#ffffff',
-        textAlignVertical: 'center',
-        textAlign: 'center',  }} />],
+      objects: [],
+      objID: 0,
+      text: '',
     }
     this._getExperienceSelector = this._getExperienceSelector.bind(this);
     this._getARNavigator = this._getARNavigator.bind(this);
@@ -108,13 +106,13 @@ export default class ViroSample extends Component {
 
   addObjects() {
     let newObjects = this.state.objects;
-    let testO = this.state.test + 1;
-    newObjects.push(<ViroARCamera> 
-                      <ViroText className="new" text={"" + testO} scale={[.5, .5, .5]} position={[0, 0, -1]} style={localStyles.helloWorldTextStyle} />
+    newObjects.push(<ViroARCamera key={this.state.objID}> 
+                      <ViroText className="new" text={this.state.text} scale={[.5, .5, .5]} position={[0, 0, -1]} style={localStyles.helloWorldTextStyle} />
                     </ViroARCamera>)
     this.setState({
       objects: newObjects,
-      test: testO,
+      text: "",
+      objID: this.state.objID+1
     })
   }
 
@@ -127,6 +125,12 @@ export default class ViroSample extends Component {
           style={{flex : 1}}
           viroAppProps={{objects: this.state.objects}}>
         </ViroARSceneNavigator>
+        <View style={{position: 'absolute', bottom: "50%", height:34,  alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center', width: 64, height: 64}}>
+          <TextInput placeholder="Type here to translate!"
+            onChangeText={(text) => this.setState({text})}
+            value={this.state.text}>
+          </TextInput>
+        </View>
         <View style={{position: 'absolute', left: "50%", bottom: "30%", height:34,  alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center', width: 64, height: 64, borderRadius: 64, backgroundColor: "red", }}>
           <TouchableHighlight onPress={() => this.addObjects()}>
             <Text style={localStyles.buttonText}>Add</Text>
@@ -229,4 +233,33 @@ var localStyles = StyleSheet.create({
   },
 });
 
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
+module.exports = ViroSample
 module.exports = ViroSample
