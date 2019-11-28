@@ -15,7 +15,7 @@ import {
   StyleSheet,
   PixelRatio,
   TouchableHighlight,
-  TextInput
+  TextInput,
 } from 'react-native';
 
 import {
