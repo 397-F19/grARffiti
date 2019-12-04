@@ -121,17 +121,7 @@ export default class HelloWorldSceneAR extends Component {
             shadowFarZ={5}
             shadowOpacity={.7} />
 
-          <Viro3DObject
-              source={require('./res/emoji_smile/emoji_smile.vrx')}
-              position={[0, 0, 0]}
-              scale={[.2, .2, .2]}
-              type="VRX"
-            lightReceivingBitMask={3}
-            shadowCastingBitMask={2}
-            transformBehaviors={['billboardY']}
-            resources={[require('./res/emoji_smile/emoji_smile_diffuse.png'),
-                       require('./res/emoji_smile/emoji_smile_specular.png'),
-                       require('./res/emoji_smile/emoji_smile_normal.png')]}/>
+
 
           <ViroQuad
             rotation={[-90,0,0]}
@@ -161,17 +151,6 @@ export default class HelloWorldSceneAR extends Component {
             shadowFarZ={5}
             shadowOpacity={.7} />
 
-          <Viro3DObject
-            source={require('./res/object_soccerball/object_soccer_ball.vrx')}
-            position={[0, .15, 0]}
-            scale={[.3, .3, .3]}
-            type="VRX"
-            lightReceivingBitMask={5}
-            shadowCastingBitMask={4}
-            transformBehaviors={['billboardY']}
-            resources={[require('./res/object_soccerball/object_soccer_ball_diffuse.png'),
-                       require('./res/object_soccerball/object_soccer_ball_normal.png'),
-                       require('./res/object_soccerball/object_soccer_ball_specular.png')]}/>
           <ViroQuad
             rotation={[-90,0,0]}
             width={.5} height={.5}

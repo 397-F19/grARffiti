@@ -125,8 +125,8 @@ export default class ViroSample extends Component {
           style={{flex : 1}}
           viroAppProps={{objects: this.state.objects}}>
         </ViroARSceneNavigator>
-        <View style={{position: 'absolute', bottom: "50%", height:34,  alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center', width: 64, height: 64}}>
-          <TextInput placeholder="Type here to translate!"
+        <View style={{position: 'absolute', left: "10%", bottom: "30%", color: "black", width: 128, backgroundColor: "white", height:34,  alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center', height: 64}}>
+          <TextInput placeholder="Text here!"
             onChangeText={(text) => this.setState({text})}
             value={this.state.text}>
           </TextInput>
