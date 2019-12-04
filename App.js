@@ -9,20 +9,22 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
-  Text,
-  View,
+  
   StyleSheet,
   PixelRatio,
   TouchableHighlight,
   TextInput,
+  AppRegistry,
+  Text,
+  View,
 } from 'react-native';
 
 import {
-  ViroVRSceneNavigator,
-  ViroARCamera,
+  
   ViroARSceneNavigator,
   ViroText,
+  ViroVRSceneNavigator,
+  ViroARCamera,
 } from 'react-viro';
 
 // import scene from './js/HelloWorldSceneAR'
@@ -39,17 +41,18 @@ var sharedProps = {
 }
 
 // Sets the default scene you want for AR and VR
-var InitialARScene = require('./js/HelloWorldSceneAR');
-var InitialVRScene = require('./js/HelloWorldSceneAR');
+
 
 var UNSET = "UNSET";
 var VR_NAVIGATOR_TYPE = "VR";
 var AR_NAVIGATOR_TYPE = "AR";
 
+var InitialARScene = require('./js/HelloWorldSceneAR');
+var InitialVRScene = require('./js/HelloWorldSceneAR');
 // This determines which type of experience to launch in, or UNSET, if the user should
 // be presented with a choice of AR or VR. By default, we offer the user a choice.
 var defaultNavigatorType = UNSET;
-
+// viro new stuff
 export default class ViroSample extends Component {
   constructor() {
     super();
